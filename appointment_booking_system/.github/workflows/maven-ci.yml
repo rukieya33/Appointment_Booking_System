@@ -1,0 +1,37 @@
+#name: Java CI with Maven
+#
+## 1. Define when this workflow should run
+#on:
+#  push:
+#    branches: [ "main", "master", "dev" ]
+#  pull_request:
+#    branches: [ "main", "master", "dev" ]
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest # Runs on a clean Linux virtual machine
+#
+#    steps:
+#      # 2. Checkout your repository code onto the runner
+#      - name: Checkout Repository
+#        uses: actions/checkout@v4
+#
+#      # 3. Set up Java JDK (Temurin distribution is industry standard)
+#      - name: Set up JDK 17
+#        uses: actions/setup-java@v4
+#        with:
+#          java-version: '17'
+#          distribution: 'temurin'
+#          cache: 'maven' # Built-in Maven caching to speed up future builds!
+#
+#      # 4. Grant execution permissions to Maven wrapper (if using mvnw) or use standard mvn
+#      - name: Build and Test with Maven
+#        run: mvn clean test
+#
+#      # 5. Optional: Upload Cucumber HTML Reports as an artifact if tests fail or pass
+#      - name: Upload Cucumber Test Reports
+#        if: always() # Runs even if tests fail so you can inspect reports
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: cucumber-reports
+#          path: target/cucumber-reports.html
