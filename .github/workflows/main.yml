@@ -1,38 +1,43 @@
 name: Java CI with Maven
 
 on:
- push:
-   branches: [ "main", "master", "dev" ]
- pull_request:
-   branches: [ "main", "master", "dev" ]
+  push:
+    branches: [main, master, dev]
+  pull_request:
+    branches: [main, master, dev]
+
+permissions:
+  contents: read
 
 jobs:
- build:
-   runs-on: ubuntu-latest 
+  build:
+    runs-on: ubuntu-latest
 
-   steps:
-    
-     - name: Checkout Repository
-       uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    
-     - name: Set up JDK 27
-      uses: actions/setup-java@v6
-      with:
-        distribution: temurin
-        java-version: '27'
-        cache: maven
-      
-      name: Show Java and Maven versions
-      run: 
-        java -27
-        mvn -3.0.0
-      
-      name: Build and test
-      run: mvn --batch-mode clean verify
-     - name: Upload Cucumber Test Reports
-       if: always() 
-       uses: actions/upload-artifact@v4
-       with:
-         name: cucumber-reports
-         path: target/cucumber-reports.html
+      - name: Set up JDK
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Show Java and Maven versions
+        run: |
+          java -version
+          mvn -version
+
+      - name: Build and test
+        run: mvn --batch-mode clean verify
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            target/site/serenity
+            target/surefire-reports
+          if-no-files-found: warn
