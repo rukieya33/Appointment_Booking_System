@@ -12,4 +12,11 @@ public class LoginRequest {
         private String password;
 
     public void setUsername(String username) { this.email = email; }
+    public String getEmail() {
+    return email;
+}
+
+public String getPassword() {
+    return password;
+}
 }
