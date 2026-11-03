@@ -12,7 +12,20 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: appointment_booking_system_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: roses
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d appointment_booking_system_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,6 +43,10 @@ jobs:
           mvn -version
 
       - name: Build and test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/appointment_booking_system_db
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: roses
         run: mvn --batch-mode clean verify
 
       - name: Upload test reports
